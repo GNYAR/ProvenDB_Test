@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const ProvenDB = require('@southbanksoftware/provendb-node-driver').Database;
 
 // Replace this with the URI from the ProvenDB UI.
-const provenDB_URI = 'URI';
+const provenDB_URI = 'mongodb://suiio:suiioqwertyuiop@test001.provendb.io/test001?ssl=true';
 let dbObject;
 let collection;
 let pdb;
