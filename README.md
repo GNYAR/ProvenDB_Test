@@ -4,6 +4,9 @@
 |   Date   |  Content  | Note |
 |----------|-----------|------|
 | 20210628 | server.js | |
+| 20210628 |  ideas.js | |
+| 20210629 | IdeasTable.jsx | |
+| 20210630 | /ideas/detail | |
 
 ***
 

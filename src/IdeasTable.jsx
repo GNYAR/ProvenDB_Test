@@ -18,6 +18,16 @@ const columns = [
         title: 'uploadDate',
         dataIndex: 'uploadDate',
         key: 'uploadDate'
+    },
+    {
+        title: 'status',
+        dataIndex: 'status',
+        key: 'status'
+    },
+    {
+        title: 'proofId',
+        dataIndex: 'proofId',
+        key: 'proofId'
     }
 ];
 
@@ -37,7 +47,7 @@ class IdeasTable extends React.Component<Props, State> {
 
     fetchIdeas = () => {
         axios
-            .get('/ideas')
+            .get('/ideas/detail')
             .then(response => {
                 console.log('Result of getting ideas:');
                 console.log(response);
