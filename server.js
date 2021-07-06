@@ -5,10 +5,16 @@ const { rejects } = require('assert');
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/proveIt/:idea', function (req, res) {
-  const { idea } = req.params;
+app.get('/proveIt/:id/:mount/:name/:department', function (req, res) {
+  const { id, mount, name, department } = req.params;
+  let idea = {
+    id: id,
+    mount: mount,
+    name: name,
+    department: department
+  }
   ideas
-    .proveNewIdea(idea)
+    .proveNewIdea(JSON.stringify(idea))
     .then(idea => {
       res.status(200).send('New idea added.');
     })
@@ -66,10 +72,16 @@ app.get('/ideas/detail', function (req, res) {
     });
 });
 
-app.get('/ideaProof/:idea', function (req, res) {
-  const { idea } = req.params;
+app.get('/ideaProof/:id/:mount/:name/:department', function (req, res) {
+  const { id, mount, name, department } = req.params;
+  let idea = {
+    id: id,
+    mount: mount,
+    name: name,
+    department: department
+  }
   ideas
-    .getIdeaProof(idea)
+    .getIdeaProof(JSON.stringify(idea))
     .then(proof => {
       res.status(200).send(proof);
     })

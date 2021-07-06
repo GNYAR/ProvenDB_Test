@@ -35,7 +35,10 @@ class IdeasTable extends React.Component<Props, State> {
     constructor() {
         super();
         this.state = {
-            ideaInput: '',
+            idInput: '',
+            mountInput: '',
+            nameInput: '',
+            departmentInput: '',
             ideaSubmitting: false,
             ideasArray: []
         };
@@ -47,10 +50,19 @@ class IdeasTable extends React.Component<Props, State> {
 
     fetchIdeas = () => {
         axios
+            .get('/ideas')
+            .then(response => {
+                console.log('Result of getting ideas:');
+                this.setState({ ideasArray: response.data });
+            })
+            .catch(err => {
+                console.error('Failed to get ideas with err');
+                console.error(err);
+            });
+        axios
             .get('/ideas/detail')
             .then(response => {
                 console.log('Result of getting ideas:');
-                console.log(response);
                 this.setState({ ideasArray: response.data });
             })
             .catch(err => {
@@ -76,11 +88,21 @@ class IdeasTable extends React.Component<Props, State> {
     };
 
     onClickSubmit = () => {
-        const { ideaInput } = this.state;
+        const {
+            idInput,
+            mountInput,
+            nameInput,
+            departmentInput
+        } = this.state;
         this.setState({ ideaSubmitting: true });
-        this.setState({ ideaInput: '' });
+        this.setState({
+            idInput: '',
+            mountInput: '',
+            nameInput: '',
+            departmentInput: ''
+        });
         axios
-            .get(`/proveIt/${this.slugify(ideaInput)}`)
+            .get(`/proveIt/${this.slugify(idInput)}/${this.slugify(mountInput)}/${this.slugify(nameInput)}/${this.slugify(departmentInput)}`)
             .then(response => {
                 console.log('Submitted new idea.');
                 this.setState({ ideaSubmitting: false });
@@ -96,41 +118,67 @@ class IdeasTable extends React.Component<Props, State> {
     onClickIdea = event => {
         const { idea } = event;
         axios
-          .get(`/ideaProof/${idea}`)
-          .then(response => {
-            const { proofs } = response.data;
-            if (proofs && proofs[0] && proofs[0].status) {
-              notification.open({
-                message: 'Idea Proof',
-                description: `This idea is ${
-                  proofs[0].status
-                } as part of proof starting with ${proofs[0].versionProofId.substr(
-                  0,
-                  5
-                )}.`
-              });
-            } else {
-              notification.open({
-                message: 'Failed to get Proof.',
-                description: 'Could not get the proof for this idea!'
-              });
-            }
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      };
+            .get(`/ideaProof/${idea}`)
+            .then(response => {
+                const { proofs } = response.data;
+                if (proofs && proofs[0] && proofs[0].status) {
+                    notification.open({
+                        message: 'Idea Proof',
+                        description: `This idea is ${proofs[0].status
+                            } as part of proof starting with ${proofs[0].versionProofId.substr(
+                                0,
+                                5
+                            )}.`
+                    });
+                } else {
+                    notification.open({
+                        message: 'Failed to get Proof.',
+                        description: 'Could not get the proof for this idea!'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    };
 
     render() {
-        const { ideasArray, ideaInput, ideaSubmitting } = this.state;
+        const { ideasArray, idInput, mountInput, nameInput, departmentInput, ideaSubmitting } = this.state;
+        ideasArray.forEach(element => {
+            console.log(JSON.parse(element.idea));
+        });
         return (
             <div className="ideasTableRoot">
                 <Input
-                    placeholder="Add an idea!"
-                    value={ideaInput}
+                    placeholder="id"
+                    value={idInput}
                     onPressEnter={this.onClickSubmit}
                     onChange={e => {
-                        this.setState({ ideaInput: e.target.value });
+                        this.setState({ idInput: e.target.value });
+                    }}
+                />
+                <Input
+                    placeholder="mount"
+                    value={mountInput}
+                    onPressEnter={this.onClickSubmit}
+                    onChange={e => {
+                        this.setState({ mountInput: e.target.value });
+                    }}
+                />
+                <Input
+                    placeholder="name"
+                    value={nameInput}
+                    onPressEnter={this.onClickSubmit}
+                    onChange={e => {
+                        this.setState({ nameInput: e.target.value });
+                    }}
+                />
+                <Input
+                    placeholder="department"
+                    value={departmentInput}
+                    onPressEnter={this.onClickSubmit}
+                    onChange={e => {
+                        this.setState({ departmentInput: e.target.value });
                     }}
                 />
                 <Button

@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const ProvenDB = require('@southbanksoftware/provendb-node-driver').Database;
 
 // Replace this with the URI from the ProvenDB UI.
-const provenDB_URI = 'URI';
+const provenDB_URI = 'mongodb://suiio:suiioqwertyuiop@version-test.provendb.io/version-test?ssl=true';
 let dbObject;
 let collection;
 let pdb;
@@ -13,7 +13,7 @@ MongoClient.connect(provenDB_URI, {
 })
   .then(client => {
     // Replace this with the database name from the ProvenDB UI.
-    dbObject = client.db('test001');
+    dbObject = client.db('version-test');
     pdb = new ProvenDB(dbObject); // Mongo Database with helper functions.
     collection = pdb.collection('provenIdeas'); // With ProvenDB Driver.
     // collection = dbObject.collection('provenIdeas'); // Without ProvenDB Driver.
@@ -93,7 +93,7 @@ module.exports = {
         reject(new Error('Could not acquire collection'));
       }
     }),
-  // Blockchain
+  // idea_Blockchain_detail
   getIdeaProof: idea =>
     new Promise((resolve, reject) => {
       if (collection) {
